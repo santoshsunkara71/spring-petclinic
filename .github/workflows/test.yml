@@ -12,16 +12,33 @@ on:
   workflow_dispatch:
 
 jobs:
-  checkout:
-    name: Checkout Source Code
+  build:
+    name: Checkout and Maven Build
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout source code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Verify Checkout
-        run: mvn clean package -DskipTests
+      # Step 2: Setup Java 21
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
 
-      - name: Check Git Commit
-        run: git log -1 --oneline
+      # Step 3: Verify Java and Maven
+      - name: Check Java Version
+        run: |
+          java -version
+          ./mvnw -version
+
+      # Step 4: Build and test application
+      - name: Maven Build
+        run: ./mvnw clean verify
+
+      # Step 5: Verify generated JAR
+      - name: List Build Artifacts
+        run: ls -lh target/*.jar

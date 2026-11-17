@@ -3,11 +3,11 @@ name: Spring PetClinic CI
 on:
   push:
     branches:
-      - main
+      - santosh
 
   pull_request:
     branches:
-      - main
+      - santosh
 
   workflow_dispatch:
 

@@ -1,13 +1,27 @@
-name: Test
+name: Spring PetClinic CI
 
 on:
   push:
-    branches: [santosh]
+    branches:
+      - santosh
+
   pull_request:
-    branches: [santosh]
+    branches:
+      - santosh
+
+  workflow_dispatch:
 
 jobs:
-  build:
+  checkout:
+    name: Checkout Source Code
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "Hello, World!"
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify Checkout
+        run: mvn clean package -DskipTests
+
+      - name: Check Git Commit
+        run: git log -1 --oneline

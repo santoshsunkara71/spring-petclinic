@@ -3,42 +3,42 @@ name: Spring PetClinic CI
 on:
   push:
     branches:
-      - santosh
+      - main
 
   pull_request:
     branches:
-      - santosh
+      - main
 
   workflow_dispatch:
 
 jobs:
   build:
-    name: Checkout and Maven Build
+    name: Build, Test and Code Quality
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout source code
+      # 1. Checkout source code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2: Setup Java 21
-      - name: Setup Java 21
+      # 2. Setup Java
+      - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: "17"
           cache: maven
 
-      # Step 3: Verify Java and Maven
-      - name: Check Java Version
+      # 3. Verify Java and Maven
+      - name: Verify Java and Maven
         run: |
           java -version
           ./mvnw -version
 
-      # Step 4: Build and test application
-      - name: Maven Build
+      # 4. Maven build, tests and Checkstyle
+      - name: Maven Build and Code Quality Check
         run: ./mvnw clean verify
 
-      # Step 5: Verify generated JAR
-      - name: List Build Artifacts
+      # 5. Verify generated artifacts
+      - name: Verify JAR
         run: ls -lh target/*.jar
